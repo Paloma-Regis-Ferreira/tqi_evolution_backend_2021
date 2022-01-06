@@ -1,16 +1,23 @@
 package com.palomaregis.tqi_evolution_backend_2021.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //model
 
 @Entity
+@Table(name = "tb_cliente")
 public class Cliente implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -19,7 +26,7 @@ public class Cliente implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String name;
+	private String nome;
 	private String email;
 	private String cpf;
 	private String rg;
@@ -27,14 +34,18 @@ public class Cliente implements Serializable{
 	private Double renda;
 	private Integer senha;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "cliente")
+	private List<Emprestimo> emprestimos = new ArrayList<>();
+	
 	public Cliente() {
 	}
 
-	public Cliente(Long id, String name, String email, String cpf, String rg, String enderecoCompleto, Double renda,
+	public Cliente(Long id, String nome, String email, String cpf, String rg, String enderecoCompleto, Double renda,
 			Integer senha) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.nome = nome;
 		this.email = email;
 		this.cpf = cpf;
 		this.rg = rg;
@@ -51,12 +62,12 @@ public class Cliente implements Serializable{
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getEmail() {
@@ -107,9 +118,13 @@ public class Cliente implements Serializable{
 		this.senha = senha;
 	}
 
+	public List<Emprestimo> getEmprestimos() {
+		return emprestimos;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, id, name);
+		return Objects.hash(email, id, nome);
 	}
 
 	@Override
@@ -121,7 +136,7 @@ public class Cliente implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		return Objects.equals(email, other.email) && Objects.equals(id, other.id) && Objects.equals(name, other.name);
+		return Objects.equals(email, other.email) && Objects.equals(id, other.id) && Objects.equals(nome, other.nome);
 	}
 	
 	
