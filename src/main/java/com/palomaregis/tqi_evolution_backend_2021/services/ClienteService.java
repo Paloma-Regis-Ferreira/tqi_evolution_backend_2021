@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.palomaregis.tqi_evolution_backend_2021.entities.Cliente;
 import com.palomaregis.tqi_evolution_backend_2021.repositories.ClienteRepository;
+import com.palomaregis.tqi_evolution_backend_2021.services.exceptions.ResourceNotFoundException;
 
 //regras de negocio e requisições ao bd
 
@@ -23,7 +24,7 @@ public class ClienteService {
 	
 	public Cliente findById(Long id) {
 		Optional<Cliente> obj = repository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public Cliente insert(Cliente obj) {
