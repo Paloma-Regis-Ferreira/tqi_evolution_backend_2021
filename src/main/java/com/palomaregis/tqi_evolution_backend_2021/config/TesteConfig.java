@@ -1,8 +1,9 @@
 package com.palomaregis.tqi_evolution_backend_2021.config;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,8 +12,10 @@ import org.springframework.context.annotation.Profile;
 
 import com.palomaregis.tqi_evolution_backend_2021.entities.Cliente;
 import com.palomaregis.tqi_evolution_backend_2021.entities.Emprestimo;
+import com.palomaregis.tqi_evolution_backend_2021.entities.Parcela;
 import com.palomaregis.tqi_evolution_backend_2021.repositories.ClienteRepository;
 import com.palomaregis.tqi_evolution_backend_2021.repositories.EmprestimoRepository;
+import com.palomaregis.tqi_evolution_backend_2021.repositories.ParcelaRepository;
 
 @Configuration
 @Profile("test")
@@ -24,6 +27,9 @@ public class TesteConfig implements CommandLineRunner{
 	@Autowired
 	private EmprestimoRepository emprestimoRepository;
 
+	@Autowired
+	private ParcelaRepository parcelaRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		
@@ -35,7 +41,19 @@ public class TesteConfig implements CommandLineRunner{
 		clienteRepository.saveAll(Arrays.asList(c1, c2));
 		
 		Emprestimo emp = new Emprestimo(null, 200.00, sdf.parse("05/01/2022"), 2, c2);
+		Emprestimo emp2 = new Emprestimo(null, 3000.00, sdf.parse("05/01/2022"), 2, c1);
+		Emprestimo emp3 = new Emprestimo(null, 1000.00, sdf.parse("05/01/2022"), 2, c2);
 		
-		emprestimoRepository.saveAll(Arrays.asList(emp));
+		emp.processamentoEmprestimo(emp);
+		emp2.processamentoEmprestimo(emp2);
+		emp3.processamentoEmprestimo(emp3);
+		
+		emprestimoRepository.saveAll(Arrays.asList(emp, emp2, emp3));
+		
+		parcelaRepository.saveAll(emp.getParcelas());
+		parcelaRepository.saveAll(emp2.getParcelas());
+		parcelaRepository.saveAll(emp3.getParcelas());
+
 	}
+	
 }

@@ -1,7 +1,10 @@
 package com.palomaregis.tqi_evolution_backend_2021.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -10,7 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -30,6 +37,10 @@ public class Emprestimo implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "emprestimo")
+	private List<Parcela> parcelas = new ArrayList<>();
 	
 	public Emprestimo() {
 	}
@@ -81,7 +92,35 @@ public class Emprestimo implements Serializable{
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+	
+	public List<Parcela> getParcelas() {
+		return parcelas;
+	}
+	
+	public void adiconarParcelaContrato(Parcela parcela) {
+		parcelas.add(parcela);
+	}
 
+	public void removerParcelaContrato(Parcela parcela) {
+		parcelas.remove(parcela);
+	}
+
+	public void processamentoEmprestimo(Emprestimo emprestimo) {
+		double valorParcela = getPrice() / getQuantidadeParcelas();
+        for (int i = 1; i <= getQuantidadeParcelas(); i++) {
+            Date date = adicionarMeses(emprestimo.getDataPrimeiraParcela(), i);
+            Parcela parc = new Parcela(null, date, valorParcela, emprestimo); 
+            emprestimo.adiconarParcelaContrato(parc);
+        }
+	}
+	
+	private Date adicionarMeses(Date dataPrimeiraParcela, int i) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dataPrimeiraParcela);
+		cal.add(Calendar.MONTH, i);
+		return cal.getTime();
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

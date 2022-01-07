@@ -25,4 +25,5 @@ public class EmprestimoService {
 		Optional<Emprestimo> obj = repository.findById(id);
 		return obj.get();
 	}
+
 }
