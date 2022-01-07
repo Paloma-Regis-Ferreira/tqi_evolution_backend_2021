@@ -3,6 +3,8 @@ package com.palomaregis.tqi_evolution_backend_2021.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -45,9 +47,13 @@ public class ClienteService {
 	}
 	
 	public Cliente update(Long id, Cliente obj) {
-		Cliente entity = repository.getOne(id);//nao exclui de imediato podendo mexer antes de efetuar operação no banco
-		updateData(entity, obj);
-		return repository.save(entity);
+		try {
+			Cliente entity = repository.getOne(id);//nao exclui de imediato podendo mexer antes de efetuar operação no banco
+			updateData(entity, obj);
+			return repository.save(entity);
+		}catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id); 
+		}
 	}
 
 	private void updateData(Cliente entity, Cliente obj) {
