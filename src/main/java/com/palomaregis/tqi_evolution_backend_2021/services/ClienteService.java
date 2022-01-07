@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.palomaregis.tqi_evolution_backend_2021.entities.Cliente;
 import com.palomaregis.tqi_evolution_backend_2021.repositories.ClienteRepository;
+import com.palomaregis.tqi_evolution_backend_2021.services.exceptions.DatabaseException;
 import com.palomaregis.tqi_evolution_backend_2021.services.exceptions.ResourceNotFoundException;
 
 //regras de negocio e requisições ao bd
@@ -32,7 +35,13 @@ public class ClienteService {
 	}
 	
 	public void delete(Long id) {
+		try {
 		repository.deleteById(id);
+		}catch(EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		}catch(DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
 	}
 	
 	public Cliente update(Long id, Cliente obj) {
