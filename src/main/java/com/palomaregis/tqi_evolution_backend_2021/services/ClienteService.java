@@ -33,4 +33,17 @@ public class ClienteService {
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
+	
+	public Cliente update(Long id, Cliente obj) {
+		Cliente entity = repository.getOne(id);//nao exclui de imediato podendo mexer antes de efetuar operação no banco
+		updateData(entity, obj);
+		return repository.save(entity);
+	}
+
+	private void updateData(Cliente entity, Cliente obj) {
+		entity.setNome(obj.getNome());
+		entity.setEmail(obj.getEmail());
+		entity.setEnderecoCompleto(obj.getEnderecoCompleto());
+		entity.setRenda(obj.getRenda());
+	}
 }
