@@ -37,9 +37,9 @@ public class TesteConfig implements CommandLineRunner{
 		
 		clienteRepository.saveAll(Arrays.asList(c1, c2));
 		
-		Emprestimo emp = new Emprestimo(null, 200.00, sdf.parse("05/01/2022"), 2, c2);
-		Emprestimo emp2 = new Emprestimo(null, 3000.00, sdf.parse("05/01/2022"), 2, c1);
-		Emprestimo emp3 = new Emprestimo(null, 1000.00, sdf.parse("05/01/2022"), 2, c2);
+		Emprestimo emp = new Emprestimo(null,sdf.parse("05/01/2022"), 200.00, sdf.parse("05/01/2022"), 2, c2);
+		Emprestimo emp2 = new Emprestimo(null,sdf.parse("05/01/2022"), 3000.00, sdf.parse("05/01/2022"), 2, c1);
+		Emprestimo emp3 = new Emprestimo(null,sdf.parse("05/01/2022"), 1000.00, sdf.parse("05/01/2022"), 2, c2);
 		
 		
 		emprestimoRepository.saveAll(Arrays.asList(emp, emp2, emp3));

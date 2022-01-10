@@ -62,4 +62,5 @@ public class ClienteService {
 		entity.setEnderecoCompleto(obj.getEnderecoCompleto());
 		entity.setRenda(obj.getRenda());
 	}
+	
 }

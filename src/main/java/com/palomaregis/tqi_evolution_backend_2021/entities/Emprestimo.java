@@ -1,6 +1,7 @@
 package com.palomaregis.tqi_evolution_backend_2021.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -29,9 +31,14 @@ public class Emprestimo implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private Calendar dataSolicitacaoEmprestimo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT")
+	private Date dataSolicitacaoEmprestimo;
+	
 	private Double price;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT")
 	private Date dataPrimeiraParcela;
+	
 	private Integer quantidadeParcelas;
 	
 	@ManyToOne
@@ -45,9 +52,9 @@ public class Emprestimo implements Serializable{
 	public Emprestimo() {
 	}
 
-	public Emprestimo(Long id, Double price, Date dataPrimeiraParcela, Integer quantidadeParcelas, Cliente cliente) {
+	public Emprestimo(Long id, Date dataSolicitacaoEmprestimo, Double price, Date dataPrimeiraParcela, Integer quantidadeParcelas, Cliente cliente) {
 		this.id = id;
-		this.dataSolicitacaoEmprestimo = Calendar.getInstance();
+		this.dataSolicitacaoEmprestimo = dataSolicitacaoEmprestimo;
 		this.price = price;
 		this.dataPrimeiraParcela = dataPrimeiraParcela;
 		this.quantidadeParcelas = quantidadeParcelas;
@@ -62,7 +69,7 @@ public class Emprestimo implements Serializable{
 		this.id = id;
 	}
 	
-	public Calendar getDataSolicitacaoEmprestimo() {
+	public Date getDataSolicitacaoEmprestimo() {
 		return dataSolicitacaoEmprestimo;
 	}
 

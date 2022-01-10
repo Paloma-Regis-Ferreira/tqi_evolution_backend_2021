@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.palomaregis.tqi_evolution_backend_2021.entities.Cliente;
+import com.palomaregis.tqi_evolution_backend_2021.entities.Emprestimo;
 import com.palomaregis.tqi_evolution_backend_2021.services.ClienteService;
+import com.palomaregis.tqi_evolution_backend_2021.services.EmprestimoService;
 
 //Controller
 
@@ -57,4 +59,5 @@ public class ClienteResource {
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
+	
 }
