@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -24,12 +23,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "tb_emprestimo")
 public class Emprestimo implements Serializable{
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L; 
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private Calendar dataSolicitacaoEmprestimo;
 	private Double price;
 	private Date dataPrimeiraParcela;
 	private Integer quantidadeParcelas;
@@ -47,6 +47,7 @@ public class Emprestimo implements Serializable{
 
 	public Emprestimo(Long id, Double price, Date dataPrimeiraParcela, Integer quantidadeParcelas, Cliente cliente) {
 		this.id = id;
+		this.dataSolicitacaoEmprestimo = Calendar.getInstance();
 		this.price = price;
 		this.dataPrimeiraParcela = dataPrimeiraParcela;
 		this.quantidadeParcelas = quantidadeParcelas;
@@ -59,6 +60,10 @@ public class Emprestimo implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Calendar getDataSolicitacaoEmprestimo() {
+		return dataSolicitacaoEmprestimo;
 	}
 
 	public Double getPrice() {
@@ -103,22 +108,6 @@ public class Emprestimo implements Serializable{
 
 	public void removerParcelaContrato(Parcela parcela) {
 		parcelas.remove(parcela);
-	}
-
-	public void processamentoEmprestimo(Emprestimo emprestimo) {
-		double valorParcela = getPrice() / getQuantidadeParcelas();
-        for (int i = 1; i <= getQuantidadeParcelas(); i++) {
-            Date date = adicionarMeses(emprestimo.getDataPrimeiraParcela(), i);
-            Parcela parc = new Parcela(null, date, valorParcela, emprestimo); 
-            emprestimo.adiconarParcelaContrato(parc);
-        }
-	}
-	
-	private Date adicionarMeses(Date dataPrimeiraParcela, int i) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(dataPrimeiraParcela);
-		cal.add(Calendar.MONTH, i);
-		return cal.getTime();
 	}
 	
 	@Override

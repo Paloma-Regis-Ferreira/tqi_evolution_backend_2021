@@ -21,7 +21,7 @@ import com.palomaregis.tqi_evolution_backend_2021.services.exceptions.ResourceNo
 public class ClienteService {
 	
 	@Autowired
-	private ClienteRepository repository;
+	protected ClienteRepository repository;
 	
 	public List<Cliente> findAll(){
 		return repository.findAll();
